@@ -127,7 +127,7 @@ namespace coronavirus_heat_map {
         public MainWindow() {
 
             // Sleep window to allow for longer splash-screen
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(5000);
             InitializeComponent();
 
             // Screen-Size Properties
