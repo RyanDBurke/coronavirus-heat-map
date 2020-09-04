@@ -43,7 +43,7 @@ namespace coronavirus_heat_map {
             CloseButton.Click += (s, e) => Close();
 
             // Left Side (would change via right-side input)
-            leftSide(STATE);
+            // leftSide(STATE);
 
             // Right-Side & Map
         }
@@ -188,6 +188,12 @@ namespace coronavirus_heat_map {
             deathsBar.Foreground = Brushes.White;
 
             buildBarGraph(STATE, "deaths");
+        }
+
+
+        /* this needs to handle all states being clicked! */
+        public void clickedState(object sender, MouseButtonEventArgs e) {
+            
         }
 
     }
