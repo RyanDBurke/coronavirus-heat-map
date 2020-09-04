@@ -128,28 +128,97 @@
                             Margin="0,330,0,0"
                             VerticalAlignment="Top">
 
-                <!-- options below line graph -->
+                <!-- bar graph container, WxH: 230x85 -->
+                <Grid Background="#292929"
+                            Height="85"
+                      Name="barGraph">
+
+                    <!-- actual graph WxH: 220x75 -->
+                    <Grid Background="#292929"
+                          Height="75"
+                          Width="220">
+
+                        <!-- last sixMonths -->
+                        <StackPanel Background="#292929"
+                              Width="35"
+                              Name="month1">
+                            <TextBlock Foreground="White"
+                                       FontSize="7"
+                                       Name="month1Name">
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Background="#292929"
+                              Width="35"
+                              Name="month2">
+                            <TextBlock Foreground="White"
+                                       FontSize="7"
+                                       Name="month2Name">
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Background="#292929"
+                              Width="35"
+                              Name="month3">
+                            <TextBlock Foreground="White"
+                                       FontSize="7"
+                                       Name="month3Name">
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Background="#292929"
+                              Width="35"
+                              Name="month4">
+                            <TextBlock Foreground="White"
+                                       FontSize="7"
+                                       Name="month4Name">
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Background="#292929"
+                              Width="35"
+                              Name="month5">
+                            <TextBlock Foreground="White"
+                                       FontSize="7"
+                                       Name="month5Name">
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Background="#292929"
+                              Width="35"
+                              Name="month6">
+                            <TextBlock Foreground="White"
+                                       FontSize="7"
+                                       Name="month6Name">
+                            </TextBlock>
+                        </StackPanel>
+
+                    </Grid>
+
+                </Grid>
+
+                <!-- options below bar graph -->
                 <StackPanel Background="#292929" 
                             Orientation="Horizontal"
-                            Margin="0,85,0,0"
+                            Margin="0,0,0,0"
                             Height="20">
                     <TextBlock Margin="5, 0, 0, 5"
                                Width="72"
                                Name="testedBar"
                                Foreground="#B2B2B2"
-                               PreviewMouseDown="lineGraphTextTested"
+                               PreviewMouseDown="barGraphTextTested"
                                FontSize="12">Tested</TextBlock >
                     <TextBlock Margin="14, 0, 0, 5"
                                Name="positiveBar"
                                Width="72"
                                Foreground="#B2B2B2"
-                               PreviewMouseDown="lineGraphTextPositive"
+                               PreviewMouseDown="barGraphTextPositive"
                                FontSize="12">Positive</TextBlock >
                     <TextBlock Margin="24, 0, 0, 5"
                                Name="deathsBar"
                                Width="72"
                                Foreground="#B2B2B2"
-                               PreviewMouseDown="lineGraphTextDeaths"
+                               PreviewMouseDown="barGraphTextDeaths"
                                FontSize="12">Deaths</TextBlock >
 
                 </StackPanel>

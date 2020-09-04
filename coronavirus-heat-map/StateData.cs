@@ -69,7 +69,7 @@ namespace coronavirus_heat_map {
             int currentMonth = UnixTimeStampToDateTime(unixTimes[unixTimes.Count - 1]).Month;
             int currentMonthNum = data[data.Count - 1];
 
-            int previousMonth = currentMonth - 1;
+            int previousMonth = (currentMonth == 1) ? 12 : currentMonth - 1; // handles January/December
             int previousMonthNum = -1;
 
             int breakLoop = 0;
@@ -101,8 +101,9 @@ namespace coronavirus_heat_map {
             }
         }
 
-        /* returns necessary data to build line Graph */
-        public Dictionary<int, int> lineGraphData(string dataType) {
+        /* returns necessary data to build line Graph (only records last 6 months) */
+        /* worth nothing keys are sorted in reverse order (most recent month first) */
+        public Dictionary<int, int> barGraphData(string dataType) {
 
             // <month, numData>
             Dictionary<int, int> graphData = new Dictionary<int, int>();
@@ -119,14 +120,21 @@ namespace coronavirus_heat_map {
                 return null;
             }
 
-            for (int i = 0; i < unixTimes.Count; i++) {
+            int monthsAdded = 0;
+
+            for (int i = unixTimes.Count - 1; i >= 0; i--) {
                 int month = UnixTimeStampToDateTime(unixTimes[i]).Month;
                 if (!graphData.ContainsKey(month)) {
                     graphData[month] = data[i];
+                    monthsAdded++;
+
+                    // only add last 6 months
+                    if (monthsAdded == 6) { return graphData; }
                 }
             }
 
-            return graphData;
+            /* should never reach here */
+            return null;
         }
 
         /* getters */
