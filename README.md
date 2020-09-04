@@ -1,7 +1,7 @@
 work-in-progess
 
 # coronavirus-heat-map
-a windows desktop application displaying covid statistics for each state.
+a windows desktop application displaying covid statistics for each state via an interactive map.
 
 <figure>
   <img src="./coronavirus-heat-map/images/splashScreen.png" alt="demo">
