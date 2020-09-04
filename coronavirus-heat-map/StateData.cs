@@ -101,6 +101,7 @@ namespace coronavirus_heat_map {
             }
         }
 
+        /* returns necessary data to build line Graph */
         public Dictionary<int, int> lineGraphData(string dataType) {
 
             // <month, numData>
