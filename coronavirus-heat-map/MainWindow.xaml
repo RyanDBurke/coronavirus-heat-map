@@ -27,7 +27,7 @@
             </StackPanel>
             <StackPanel Height="35" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button Width="35" Content="-" Name="MinimizeButton" Foreground="White" Background="#121212" BorderThickness="0" FontSize="16" />
-                <Button Width="35" Content="?" Name="Github" Foreground="White" Background="#121212" BorderThickness="0" FontSize="16" />
+                <Button Width="35" Content="&gt;_" Name="Github" Foreground="White" Background="#121212" BorderThickness="0" FontSize="16" />
                 <!-- Maximize button <Button Width="35" Content="+" Name="MaximizeButton" Foreground="Gray" Background="#121212" BorderThickness="0" FontSize="16" />-->
                 <Button Width="35" Content="x" Name="CloseButton" Foreground="White" Background="#121212" BorderThickness="0" FontSize="16" />
             </StackPanel>

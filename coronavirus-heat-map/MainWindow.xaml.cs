@@ -151,7 +151,7 @@ namespace coronavirus_heat_map
             double screenWidth = SystemParameters.PrimaryScreenWidth; 
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            // Minimize, Maximize (disabled), and Close Window
+            // Minimize, Maximize (disabled), Open Github, and Close Window
             SourceInitialized += (s, e) =>
             {
                 IntPtr handle = (new WindowInteropHelper(this)).Handle;
@@ -159,7 +159,7 @@ namespace coronavirus_heat_map
             };
 
             MinimizeButton.Click += (s, e) => WindowState = WindowState.Minimized;
-            Github.Click += (s, e) => System.Diagnostics.Process.Start("https://github.com/RyanDBurke");
+            Github.Click += (s, e) => System.Diagnostics.Process.Start("https://github.com/RyanDBurke/coronavirus-heat-map");
             // MaximizeButton.Click += (s, e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             CloseButton.Click += (s, e) => Close();
 
