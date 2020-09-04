@@ -17,18 +17,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Maps.MapControl.WPF;
 
-namespace coronavirus_heat_map
-{
+namespace coronavirus_heat_map {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
 
-        private static IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            switch (msg)
-            {
+        private static IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
+            switch (msg) {
                 case 0x0024:
                     WmGetMinMaxInfo(hwnd, lParam);
                     handled = true;
@@ -37,13 +33,11 @@ namespace coronavirus_heat_map
             return (IntPtr)0;
         }
 
-        private static void WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
-        {
+        private static void WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam) {
             MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
             int MONITOR_DEFAULTTONEAREST = 0x00000002;
             IntPtr monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-            if (monitor != IntPtr.Zero)
-            {
+            if (monitor != IntPtr.Zero) {
                 MONITORINFO monitorInfo = new MONITORINFO();
                 GetMonitorInfo(monitor, monitorInfo);
                 RECT rcWorkArea = monitorInfo.rcWork;
@@ -57,23 +51,20 @@ namespace coronavirus_heat_map
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
+        public struct POINT {
             /// <summary>x coordinate of point.</summary>
             public int x;
             /// <summary>y coordinate of point.</summary>
             public int y;
             /// <summary>Construct a point of coordinates (x,y).</summary>
-            public POINT(int x, int y)
-            {
+            public POINT(int x, int y) {
                 this.x = x;
                 this.y = y;
             }
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct MINMAXINFO
-        {
+        public struct MINMAXINFO {
             public POINT ptReserved;
             public POINT ptMaxSize;
             public POINT ptMaxPosition;
@@ -82,8 +73,7 @@ namespace coronavirus_heat_map
         };
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class MONITORINFO
-        {
+        public class MONITORINFO {
             public int cbSize = Marshal.SizeOf(typeof(MONITORINFO));
             public RECT rcMonitor = new RECT();
             public RECT rcWork = new RECT();
@@ -91,8 +81,7 @@ namespace coronavirus_heat_map
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 0)]
-        public struct RECT
-        {
+        public struct RECT {
             public int left;
             public int top;
             public int right;
@@ -100,28 +89,24 @@ namespace coronavirus_heat_map
             public static readonly RECT Empty = new RECT();
             public int Width { get { return Math.Abs(right - left); } }
             public int Height { get { return bottom - top; } }
-            public RECT(int left, int top, int right, int bottom)
-            {
+            public RECT(int left, int top, int right, int bottom) {
                 this.left = left;
                 this.top = top;
                 this.right = right;
                 this.bottom = bottom;
             }
-            public RECT(RECT rcSrc)
-            {
+            public RECT(RECT rcSrc) {
                 left = rcSrc.left;
                 top = rcSrc.top;
                 right = rcSrc.right;
                 bottom = rcSrc.bottom;
             }
             public bool IsEmpty { get { return left >= right || top >= bottom; } }
-            public override string ToString()
-            {
+            public override string ToString() {
                 if (this == Empty) { return "RECT {Empty}"; }
                 return "RECT { left : " + left + " / top : " + top + " / right : " + right + " / bottom : " + bottom + " }";
             }
-            public override bool Equals(object obj)
-            {
+            public override bool Equals(object obj) {
                 if (!(obj is Rect)) { return false; }
                 return (this == (RECT)obj);
             }
@@ -139,21 +124,18 @@ namespace coronavirus_heat_map
         [DllImport("User32")]
         internal static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
 
-
-        public MainWindow()
-        {
+        public MainWindow() {
 
             // Sleep window to allow for longer splash-screen
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(1000);
             InitializeComponent();
 
             // Screen-Size Properties
-            double screenWidth = SystemParameters.PrimaryScreenWidth; 
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
             // Minimize, Maximize (disabled), Open Github, and Close Window
-            SourceInitialized += (s, e) =>
-            {
+            SourceInitialized += (s, e) => {
                 IntPtr handle = (new WindowInteropHelper(this)).Handle;
                 HwndSource.FromHwnd(handle).AddHook(new HwndSourceHook(WindowProc));
             };
@@ -163,11 +145,54 @@ namespace coronavirus_heat_map
             // MaximizeButton.Click += (s, e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             CloseButton.Click += (s, e) => Close();
 
-            // Left Side-Bar
+            // Left Side
+            leftSide("md");
 
             // Right-Side & Map
-            // myMap.Focus();
-            
         }
+
+        // displays the data for the state on the left side
+        public void leftSide(string state) {
+            StateData st = new StateData(state);
+            List<int> tested = st.getNumTested();
+            List<int> positive = st.getNumPositive();
+            List<int> deaths = st.getNumDeaths();
+            List<int> time = st.getUnixTimes();
+
+            // display data
+            numTested.Text = (tested[tested.Count - 1] > 1000000) ? ((double)tested[tested.Count - 1] / 1000000).ToString("0.##") + "M" : tested[tested.Count - 1].ToString("#,##0");
+            numPositive.Text = (positive[positive.Count - 1] > 1000000) ? ((double)positive[positive.Count - 1] / 1000000).ToString("0.##") + "M" : positive[positive.Count - 1].ToString("#,##0");
+            numDeaths.Text = (deaths[deaths.Count - 1] > 1000000) ? ((double)deaths[deaths.Count - 1] / 1000000).ToString("0.##") + "M" : deaths[deaths.Count - 1].ToString("#,##0");
+
+            // display percents
+            percentTestedIncrease.Text = "+" + st.percentageDifference("TESTED").ToString("0") + "%";
+            percentPositiveIncrease.Text = "+" + st.percentageDifference("positive").ToString("0") + "%";
+            percentDeathsIncrease.Text = "+" + st.percentageDifference("deaths").ToString("0") + "%";
+
+            // display line graph
+            foreach (KeyValuePair<int, int> kvp in st.lineGraphData("tested")) {
+                Console.WriteLine("Month: {0} -- Tested: {1}", kvp.Key, kvp.Value);
+            }
+        }
+
+
+        /* use to select which data you'd like to see for the line graph */
+        public void lineGraphTextTested(object sender, MouseButtonEventArgs e) {
+            testedBar.Foreground = Brushes.White;
+            positiveBar.Foreground = Brushes.Gray;
+            deathsBar.Foreground = Brushes.Gray;
+        }
+        public void lineGraphTextPositive(object sender, MouseButtonEventArgs e) {
+            testedBar.Foreground = Brushes.Gray;
+            positiveBar.Foreground = Brushes.White;
+            deathsBar.Foreground = Brushes.Gray;
+        }
+
+        public void lineGraphTextDeaths(object sender, MouseButtonEventArgs e) {
+            testedBar.Foreground = Brushes.Gray;
+            positiveBar.Foreground = Brushes.Gray;
+            deathsBar.Foreground = Brushes.White;
+        }
+
     }
 }

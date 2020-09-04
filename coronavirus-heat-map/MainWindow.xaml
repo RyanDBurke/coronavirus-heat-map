@@ -6,40 +6,161 @@
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         xmlns:local="clr-namespace:coronavirus_heat_map"
         mc:Ignorable="d"
-        Title="coronavirus-heat-map" Height="500" Width="800"
+        Title="coronavirus-heat-map"
+        Height="500"
+        Width="800"
         Icon="images/icon.png"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="#121212"
         ResizeMode="NoResize">
-    
+
     <!-- making custom Window Chrome Bar -->
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="35" />
     </WindowChrome.WindowChrome>
 
     <Grid>
-        <Grid VerticalAlignment="Top" Background="#121212">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Height="35" WindowChrome.IsHitTestVisibleInChrome="True" Margin="20,5">
-                <TextBlock Foreground="White" Name="Title" FontSize="12" Margin="5, 5, 5, 5">
+        <Grid VerticalAlignment="Top"
+              Background="#121212">
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Height="35"
+                        WindowChrome.IsHitTestVisibleInChrome="True"
+                        Margin="20,5">
+                <TextBlock Foreground="White"
+                           Name="Title"
+                           FontSize="12"
+                           Margin="5, 5, 5, 5">
                     𝙘𝙤𝙧𝙤𝙣𝙖𝙫𝙞𝙧𝙪𝙨-𝙝𝙚𝙖𝙩-𝙢𝙖𝙥
                 </TextBlock>
             </StackPanel>
-            <StackPanel Height="35" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Width="35" Content="-" Name="MinimizeButton" Foreground="White" Background="#121212" BorderThickness="0" FontSize="16" />
-                <Button Width="35" Content="&gt;_" Name="Github" Foreground="White" Background="#121212" BorderThickness="0" FontSize="16" />
+            <StackPanel Height="35"
+                        WindowChrome.IsHitTestVisibleInChrome="True"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button Width="35"
+                        Content="-"
+                        Name="MinimizeButton"
+                        Foreground="White"
+                        Background="#121212"
+                        BorderThickness="0"
+                        FontSize="16" />
+                <Button Width="35"
+                        Content="&gt;_"
+                        Name="Github"
+                        Foreground="White"
+                        Background="#121212"
+                        BorderThickness="0"
+                        FontSize="16" />
                 <!-- Maximize button <Button Width="35" Content="+" Name="MaximizeButton" Foreground="Gray" Background="#121212" BorderThickness="0" FontSize="16" />-->
-                <Button Width="35" Content="x" Name="CloseButton" Foreground="White" Background="#121212" BorderThickness="0" FontSize="16" />
+                <Button Width="35"
+                        Content="x"
+                        Name="CloseButton"
+                        Foreground="White"
+                        Background="#121212"
+                        BorderThickness="0"
+                        FontSize="16" />
             </StackPanel>
         </Grid>
 
         <!-- Left SideBar -->
-        <Grid Name="leftSideBar" Margin="20, 45, 550, 20" Background="#292929">
+        <Grid Name="leftSideBar"
+              Margin="20, 45, 550, 20">
+            <StackPanel Background="#292929"
+                            Height="105"
+                            VerticalAlignment="Top">
+                <TextBlock Margin="10,0,10,10"
+                               Name="tested"
+                               Foreground="#B2B2B2"
+                               FontSize="20">Tested</TextBlock >
+                <TextBlock Margin="10,-15,10,10"
+                               Name="numTested"
+                               Foreground="white"
+                               FontSize="50">--</TextBlock >
+                <TextBlock Margin="20,-15,10,10"
+                               Name="percentTestedIncrease"
+                                HorizontalAlignment="Right"
+                               Foreground="#B2B2B2"
+                               FontSize="12"></TextBlock >
+            </StackPanel>
 
+            <StackPanel Background="#292929"
+                            Height="105"
+                            Margin="0,110,0,0"
+                            VerticalAlignment="Top">
+                <TextBlock Margin="10,0,10,10"
+                               Name="positive"
+                               Foreground="#B2B2B2"
+                               FontSize="20">Positive</TextBlock >
+                <TextBlock Margin="10,-15,10,10"
+                               Name="numPositive"
+                               Foreground="white"
+                               FontSize="50">--</TextBlock >
+                <TextBlock Margin="20,-15,10,10"
+                               Name="percentPositiveIncrease"
+                                HorizontalAlignment="Right"
+                               Foreground="#B2B2B2"
+                               FontSize="12"></TextBlock >
+            </StackPanel>
+            <StackPanel Background="#292929"
+                            Height="105"
+                            Margin="0,220,0,0"
+                            VerticalAlignment="Top">
+                <TextBlock Margin="10,0,10,10"
+                               Name="deaths"
+                               Foreground="#B2B2B2"
+                               FontSize="20">Deaths</TextBlock >
+                <TextBlock Margin="10,-15,10,10"
+                               Name="numDeaths"
+                               Foreground="white"
+                               FontSize="50">--</TextBlock >
+                <TextBlock Margin="20,-15,10,10"
+                               Name="percentDeathsIncrease"
+                                HorizontalAlignment="Right"
+                               Foreground="#B2B2B2"
+                               FontSize="12"></TextBlock >
+            </StackPanel>
+
+            <StackPanel Background="#292929"
+                            Height="105"
+                            Margin="0,330,0,0"
+                            VerticalAlignment="Top">
+
+                <!-- options below line graph -->
+                <StackPanel Background="#292929" 
+                            Orientation="Horizontal"
+                            Margin="0,85,0,0"
+                            Height="20">
+                    <TextBlock Margin="5, 0, 0, 5"
+                               Width="72"
+                               Name="testedBar"
+                               Foreground="#B2B2B2"
+                               PreviewMouseDown="lineGraphTextTested"
+                               FontSize="12">Tested</TextBlock >
+                    <TextBlock Margin="14, 0, 0, 5"
+                               Name="positiveBar"
+                               Width="72"
+                               Foreground="#B2B2B2"
+                               PreviewMouseDown="lineGraphTextPositive"
+                               FontSize="12">Positive</TextBlock >
+                    <TextBlock Margin="24, 0, 0, 5"
+                               Name="deathsBar"
+                               Width="72"
+                               Foreground="#B2B2B2"
+                               PreviewMouseDown="lineGraphTextDeaths"
+                               FontSize="12">Deaths</TextBlock >
+
+                </StackPanel>
+            </StackPanel>
         </Grid>
-        
+
         <!-- Right Side -->
-        <Grid Name="rightSideBar" Margin="280, 45, 20, 20" Background="#292929">
+
+        <Grid Name="rightSideBar"
+              Margin="280, 45, 20, 20"
+              Background="#292929">
             <!--
             <m:Map Name="myMap"
                    Center="37.806029,-122.407007" 
@@ -47,5 +168,6 @@
                    Mode="AerialWithLabels" 
                    ZoomLevel="1"/> -->
         </Grid>
+
     </Grid>
 </Window>
