@@ -6,6 +6,7 @@ a windows desktop application displaying covid statistics.
 ## Features
 * Total tested, positive, and deaths for each states
 * Interactive map where you can select your state
+* Heat Map on national/state-wide scales to see area impacted
 * Live line-graph displaying covid-stats since March 2020
 
 ## Demo Pictures
