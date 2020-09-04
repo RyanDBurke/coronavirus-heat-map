@@ -23,10 +23,13 @@ namespace coronavirus_heat_map {
     /// </summary>
     public partial class MainWindow : Window {
 
+        // STATE SELECTED
+        public string STATE = "md";
+
         public MainWindow() {
 
             // Sleep window to allow for longer splash-screen
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(5000);
             InitializeComponent();
 
             // Screen-Size Properties
@@ -40,7 +43,7 @@ namespace coronavirus_heat_map {
             CloseButton.Click += (s, e) => Close();
 
             // Left Side (would change via right-side input)
-            leftSide("ca");
+            leftSide(STATE);
 
             // Right-Side & Map
         }
@@ -66,11 +69,8 @@ namespace coronavirus_heat_map {
 
         public void buildBarGraph(string state, string dataType) {
 
+            // pull state data
             StateData st = new StateData(state);
-            List<int> tested = st.getNumTested();
-            List<int> positive = st.getNumPositive();
-            List<int> deaths = st.getNumDeaths();
-            List<int> time = st.getUnixTimes();
 
             // returns max value of all keys in dictionary (helpful for creating bargraph bounds)
             int maxValue = st.barGraphData(dataType).Values.Max();
@@ -109,16 +109,6 @@ namespace coronavirus_heat_map {
             month1Name.Text = monthStrings[months[5] - 1];
 
             // adjust margin-tops for each bar
-            /* 
-             * foreach (int d in dataNum)
-             *  find which double in barStops d is closest too
-             *  report back the index in barStops of that particular double
-             *  ((barStops.Count - index + 1) * 5) 
-             *  
-             *  NOTE: margins come at 5 already
-             *  NOTE: months go from month6 to month1
-            */
-
             int indexBarStop = 0;
             int currentMonth = 6;
             foreach (int d in dataNum) {
@@ -138,7 +128,7 @@ namespace coronavirus_heat_map {
                 // marginTop for each bar in barGraph
                 int marginTop = (((barStops.Count - indexBarStop + 1) * 5) + 5 >= 75) ? 70 : ((barStops.Count - indexBarStop + 1) * 5) + 5;
 
-                // to change backgrounds
+                // change color of each bar
                 var bc = new BrushConverter();
 
                 if (currentMonth == 6) {
@@ -176,20 +166,20 @@ namespace coronavirus_heat_map {
         }
 
 
-        /* use to select which data you'd like to see for the line graph */
+        /* use to select which data you'd like to see for the bar graph */
         public void barGraphTextTested(object sender, MouseButtonEventArgs e) {
             testedBar.Foreground = Brushes.White;
             positiveBar.Foreground = Brushes.Gray;
             deathsBar.Foreground = Brushes.Gray;
 
-            buildBarGraph("ca", "tested");
+            buildBarGraph(STATE, "tested");
         }
         public void barGraphTextPositive(object sender, MouseButtonEventArgs e) {
             testedBar.Foreground = Brushes.Gray;
             positiveBar.Foreground = Brushes.White;
             deathsBar.Foreground = Brushes.Gray;
 
-            buildBarGraph("ca", "positive");
+            buildBarGraph(STATE, "positive");
         }
 
         public void barGraphTextDeaths(object sender, MouseButtonEventArgs e) {
@@ -197,7 +187,7 @@ namespace coronavirus_heat_map {
             positiveBar.Foreground = Brushes.Gray;
             deathsBar.Foreground = Brushes.White;
 
-            buildBarGraph("ca", "deaths");
+            buildBarGraph(STATE, "deaths");
         }
 
     }

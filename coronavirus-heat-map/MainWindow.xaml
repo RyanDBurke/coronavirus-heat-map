@@ -127,9 +127,16 @@
                             Height="105"
                             Margin="0,330,0,0"
                             VerticalAlignment="Top">
+                <TextBlock Foreground="#B2B2B2"
+                           FontSize="20"
+                           HorizontalAlignment="Left"
+                           Margin="10,0,10,10" Panel.ZIndex="1">
+                    Totals
+                </TextBlock>
 
                 <!-- bar graph container, WxH: 230x85 -->
                 <Grid Background="#292929"
+                      Margin="0,-34,0,0"
                             Height="85"
                       Name="barGraph">
 
