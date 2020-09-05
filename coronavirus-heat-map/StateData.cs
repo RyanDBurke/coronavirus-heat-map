@@ -120,23 +120,23 @@ namespace coronavirus_heat_map {
                 return null;
             }
 
-            int monthsAdded = 0;
+            // add in placeholders for last six months data
+            // this is vital in handling some states with less than 6 months of data
+            int currentMonth = UnixTimeStampToDateTime(unixTimes[unixTimes.Count - 1]).Month;
+            for (int i = 0; i < 6; i++) {
+                graphData[currentMonth] = 0;
+                currentMonth--;
+            }
 
+            // add relevant data to each month
             for (int i = unixTimes.Count - 1; i >= 0; i--) {
                 int month = UnixTimeStampToDateTime(unixTimes[i]).Month;
-                if (!graphData.ContainsKey(month)) {
+                if (graphData[month] == 0) {
                     graphData[month] = data[i];
-                    monthsAdded++;
-
-                    // only add last 6 months
-                    if (monthsAdded == 6) { return graphData; }
                 }
             }
 
-            /* should never reach here */
-
-            /*  PROBLEM IS HERE!!, WHAT IF ONLY LAST 5 MONTHS ARE RECORDED */
-            return null;
+            return graphData;
         }
 
         /* getters */
