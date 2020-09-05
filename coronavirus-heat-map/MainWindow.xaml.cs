@@ -24,12 +24,23 @@ namespace coronavirus_heat_map {
     public partial class MainWindow : Window {
 
         // STATE SELECTED
-        public string STATE = "md";
+        public string STATE;
+
+        // <State Abbreviation : Full State Name>
+        public Dictionary<string, string> statePairs = new Dictionary<string, string>() {
+            {"AL","Alabama"}, {"AK","Alaska"}, {"AZ","Arizona"}, {"AR","Arkansas"}, {"CA","California"}, {"CO","Colorado"}, {"CT","Connecticut"}
+            , {"DE","Delaware"}, {"FL","Florida"}, {"GA","Georgia"}, {"HI","Hawaii"}, {"ID","Idaho"}, {"IL","Illinois"}, {"IN","Indiana"}, {"IA","IOWA"}
+            , {"KS","Kansas"}, {"KY","Kentucky"}, {"LA","Louisiana"}, {"ME","Maine"}, {"MD","Maryland"}, {"MA","Massachusetts"}, {"MI","Michigan"}, {"MN","Minnesota"}
+            , {"MS","Mississippi"}, {"MO","Missouri"}, {"MT","Montana"}, {"NE","Nebraska"}, {"NV","Nevada"}, {"NH","New Hampshire"}, {"NJ","New Jersey"}, {"NM","New Mexico"}
+            , {"NY","New York"}, {"NC","North Carolina" }, {"ND","North Dakota"}, {"OH","Ohio"}, {"OK","Oklahoma"}, {"OR","Oregon"}, {"PA","Pennslyvania"}, {"RI","Rhode Island"}
+            , {"SC","South Carolina"}, {"SD","South Dakota"}, {"TN","Tennessee"}, {"TX","Texas"}, {"UT","Utah"}, {"VT","Vermont"}, {"VA","Virginia"}, {"WA","Washington"}
+            , {"WV","West Virginia"}, {"WI","Wisconsin"}, {"WY","Wyoming"}, {"DC","District of Columbia"}
+        };
 
         public MainWindow() {
 
             // Sleep window to allow for longer splash-screen
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(500);
             InitializeComponent();
 
             // Screen-Size Properties
@@ -46,6 +57,7 @@ namespace coronavirus_heat_map {
             // leftSide(STATE);
 
             // Right-Side & Map
+            
         }
 
         // displays the data for the state on the left side
@@ -54,7 +66,6 @@ namespace coronavirus_heat_map {
             List<int> tested = st.getNumTested();
             List<int> positive = st.getNumPositive();
             List<int> deaths = st.getNumDeaths();
-            List<int> time = st.getUnixTimes();
 
             // display data
             numTested.Text = (tested[tested.Count - 1] > 1000000) ? ((double)tested[tested.Count - 1] / 1000000).ToString("0.##") + "M" : tested[tested.Count - 1].ToString("#,##0");
@@ -62,7 +73,7 @@ namespace coronavirus_heat_map {
             numDeaths.Text = (deaths[deaths.Count - 1] > 1000000) ? ((double)deaths[deaths.Count - 1] / 1000000).ToString("0.##") + "M" : deaths[deaths.Count - 1].ToString("#,##0");
 
             // display percents
-            percentTestedIncrease.Text = "+" + st.percentageDifference("TESTED").ToString("0") + "%";
+            percentTestedIncrease.Text = "+" + st.percentageDifference("tested").ToString("0") + "%";
             percentPositiveIncrease.Text = "+" + st.percentageDifference("positive").ToString("0") + "%";
             percentDeathsIncrease.Text = "+" + st.percentageDifference("deaths").ToString("0") + "%";
         }
@@ -131,6 +142,7 @@ namespace coronavirus_heat_map {
                 // change color of each bar
                 var bc = new BrushConverter();
 
+                // adjust margin-tops for each bar
                 if (currentMonth == 6) {
                     currentMonth -= 1;
                     month6.Margin = new Thickness(185, marginTop, 0, 0);
@@ -193,8 +205,13 @@ namespace coronavirus_heat_map {
 
         /* this needs to handle all states being clicked! */
         public void clickedState(object sender, MouseButtonEventArgs e) {
-            
+
+            STATE = "CA";
+            leftSide("CA");
+            currentStateClicked.Text = "CA";
         }
+
+        
 
     }
 }
