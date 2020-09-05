@@ -55,9 +55,10 @@ namespace coronavirus_heat_map {
 
             // Left Side (would change via right-side input)
             // leftSide(STATE);
+            // currentStateClicked.Text = statePairs[STATE];
 
             // Right-Side & Map
-            
+
         }
 
         // displays the data for the state on the left side
@@ -80,8 +81,14 @@ namespace coronavirus_heat_map {
 
         public void buildBarGraph(string state, string dataType) {
 
+            Console.WriteLine(state);
+
             // pull state data
             StateData st = new StateData(state);
+
+            if (st == null) {
+                Console.WriteLine("FUCKING NULL");
+            }
 
             // returns max value of all keys in dictionary (helpful for creating bargraph bounds)
             int maxValue = st.barGraphData(dataType).Values.Max();
@@ -179,36 +186,45 @@ namespace coronavirus_heat_map {
 
 
         /* use to select which data you'd like to see for the bar graph */
-        public void barGraphTextTested(object sender, MouseButtonEventArgs e) {
-            testedBar.Foreground = Brushes.White;
-            positiveBar.Foreground = Brushes.Gray;
-            deathsBar.Foreground = Brushes.Gray;
+        public void barGraphText(object sender, MouseButtonEventArgs e) {
 
-            buildBarGraph(STATE, "tested");
+            string dataType = ((string) (((TextBlock)sender).Tag)).ToLower();
+
+            switch (dataType) {
+                case "tested":
+                    testedBar.Foreground = Brushes.White;
+                    positiveBar.Foreground = Brushes.Gray;
+                    deathsBar.Foreground = Brushes.Gray;
+                    break;
+                case "positive":
+                    testedBar.Foreground = Brushes.Gray;
+                    positiveBar.Foreground = Brushes.White;
+                    deathsBar.Foreground = Brushes.Gray;
+                    break;
+                case "deaths":
+                    testedBar.Foreground = Brushes.Gray;
+                    positiveBar.Foreground = Brushes.Gray;
+                    deathsBar.Foreground = Brushes.White;
+                    break;
+            }
+            
+            buildBarGraph(STATE, dataType);
+            
         }
-        public void barGraphTextPositive(object sender, MouseButtonEventArgs e) {
-            testedBar.Foreground = Brushes.Gray;
-            positiveBar.Foreground = Brushes.White;
-            deathsBar.Foreground = Brushes.Gray;
-
-            buildBarGraph(STATE, "positive");
-        }
-
-        public void barGraphTextDeaths(object sender, MouseButtonEventArgs e) {
-            testedBar.Foreground = Brushes.Gray;
-            positiveBar.Foreground = Brushes.Gray;
-            deathsBar.Foreground = Brushes.White;
-
-            buildBarGraph(STATE, "deaths");
-        }
-
 
         /* this needs to handle all states being clicked! */
         public void clickedState(object sender, MouseButtonEventArgs e) {
 
-            STATE = "CA";
-            leftSide("CA");
-            currentStateClicked.Text = "CA";
+            string state = (string) ((Path)sender).Tag;
+            STATE = state;
+            leftSide(STATE);
+            currentStateClicked.Text = statePairs[STATE.ToUpper()];
+
+            // default bar graph view
+            buildBarGraph(STATE, "tested");
+            testedBar.Foreground = Brushes.White;
+            positiveBar.Foreground = Brushes.Gray;
+            deathsBar.Foreground = Brushes.Gray;
         }
 
         

@@ -134,6 +134,8 @@ namespace coronavirus_heat_map {
             }
 
             /* should never reach here */
+
+            /*  PROBLEM IS HERE!!, WHAT IF ONLY LAST 5 MONTHS ARE RECORDED */
             return null;
         }
 
