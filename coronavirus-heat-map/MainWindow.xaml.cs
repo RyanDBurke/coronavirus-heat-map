@@ -264,7 +264,14 @@ namespace coronavirus_heat_map {
 
             // set UI MAP_STATE
             string map_state = ((string)((TextBlock)sender).Tag).ToLower();
-            MAP_STATE = map_state;
+
+            // to avoid delays from re-loading heat-map information
+            if (map_state == "heat" && MAP_STATE == "heat") {
+                return;
+            } else {
+                MAP_STATE = map_state;
+            }
+            
 
             // color depending on state's percentile!
             string[] colors = new string[] { "#ffb3b3", "#ff6666", "#ff0000", "#b30000", "#4d0000" };
