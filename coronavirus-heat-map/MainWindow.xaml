@@ -257,11 +257,13 @@
                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         >
-                    <Canvas Width="927.400" Height="587.225">
+                    <Canvas Name="MAP" Width="927.400" Height="587.225" IsEnabled="True">
                         <Canvas.Resources>
                             <Style TargetType="Path">
                                 <Setter Property="Stroke" Value="White"/>
+                                <!-- was White -->
                                 <Setter Property="Fill" Value="#ffb1b1b1"/>
+                                <!-- #ffb1b1b1 -->
                                 <Style.Triggers>
                                     <EventTrigger RoutedEvent="Mouse.MouseEnter">
                                         <BeginStoryboard>
@@ -474,6 +476,18 @@
                 </Viewbox>
 
             </StackPanel>
+
+            <!-- heat/interactive map -->
+            <Grid Margin="400, 350, 20, 0" Panel.ZIndex="2">
+                <StackPanel>
+                    <TextBlock PreviewMouseDown="changeMapState" Name="heatButton" Tag="heat" Foreground="White" TextAlignment="Center" Margin="0,20,0,0" Background="#121212" Opacity=".5">
+                        Heat Map
+                    </TextBlock>
+                    <TextBlock PreviewMouseDown="changeMapState" Name="interactiveButton" Tag="interactive" Foreground="White" TextAlignment="Center" Margin="0,5,0,0" Background="#121212" Opacity="1">
+                        Interactive
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
 
             <!-- displays current state selected -->
             <StackPanel Background="#292929"

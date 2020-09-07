@@ -26,6 +26,9 @@ namespace coronavirus_heat_map {
         // STATE SELECTED
         private string STATE;
 
+        // CURRENT MAP STATE (HEAT OR INTERACTIVE)
+        private string MAP_STATE = "interactive";
+
         // <State Abbreviation : Full State Name>
         private Dictionary<string, string> statePairs = new Dictionary<string, string>() {
             {"AL","Alabama"}, {"AK","Alaska"}, {"AZ","Arizona"}, {"AR","Arkansas"}, {"CA","California"}, {"CO","Colorado"}, {"CT","Connecticut"}
@@ -222,6 +225,90 @@ namespace coronavirus_heat_map {
             testedBar.Foreground = Brushes.White;
             positiveBar.Foreground = Brushes.Gray;
             deathsBar.Foreground = Brushes.Gray;
+        }
+
+        /* changes between heat and interactive map */
+        public void changeMapState(object sender, MouseButtonEventArgs e) {
+
+            string map_state = ((string)((TextBlock)sender).Tag).ToLower();
+            MAP_STATE = map_state;
+
+            // color depending on state's percentile 
+            string[] colors = new string[] {"#4d0000", "#b30000", "#ff0000", "#ff6666", "#ffb3b3"};
+
+            // clear stats on left sidebar
+            numTested.Text = "--";
+            numPositive.Text = "--";
+            numDeaths.Text = "--";
+            
+            // reset percentage increases
+            percentTestedIncrease.Text = "";
+            percentPositiveIncrease.Text = "";
+            percentDeathsIncrease.Text = "";
+
+            // clear bar-graph
+            var bc = new BrushConverter();
+            month6.Background = (Brush)bc.ConvertFrom("#292929");
+            month5.Background = (Brush)bc.ConvertFrom("#292929");
+            month4.Background = (Brush)bc.ConvertFrom("#292929");
+            month3.Background = (Brush)bc.ConvertFrom("#292929");
+            month2.Background = (Brush)bc.ConvertFrom("#292929");
+            month1.Background = (Brush)bc.ConvertFrom("#292929");
+
+            // reset bar-graph text
+            month6Name.Text = "";
+            month5Name.Text = "";
+            month4Name.Text = "";
+            month3Name.Text = "";
+            month2Name.Text = "";
+            month1Name.Text = "";
+
+            // reset bar-graph data selection
+            testedBar.Foreground = Brushes.Gray;
+            positiveBar.Foreground = Brushes.Gray;
+            deathsBar.Foreground = Brushes.Gray;
+
+            // reset current map clicked text
+            currentStateClicked.Text = "--";
+
+            // rearrange UI according to MAP_STATE
+            switch (MAP_STATE) {
+                case "heat":
+
+                    // change button opacity, for clarity
+                    heatButton.Opacity = 1;
+                    interactiveButton.Opacity = .5;
+
+                    // change map interactions
+                    MAP.IsEnabled = false;
+
+                    // change map colors
+
+                    break;
+                case "interactive":
+
+                    // change button opacity, for clarity
+                    interactiveButton.Opacity = 1;
+                    heatButton.Opacity = .5;
+
+                    // change map interactions
+                    MAP.IsEnabled = true;
+
+                    // reset map colors
+
+                    break;
+            }
+        }
+
+        public Dictionary<string, int> statePercentile() {
+
+            // hold each states percentile
+            Dictionary<string, int> percentile = new Dictionary<string, int>();
+
+
+
+
+            return percentile;
         }
 
         
