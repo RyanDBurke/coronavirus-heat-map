@@ -40,14 +40,14 @@ namespace coronavirus_heat_map {
         public MainWindow() {
 
             // Sleep window to allow for longer splash-screen
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(5000);
             InitializeComponent();
 
             // Screen-Size Properties
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             double screenHeight = SystemParameters.PrimaryScreenHeight;
 
-            // Minimize, Maximize (disabled), Open Github, and Close Window
+            // Minimize, Maximize (disabled), Open Github, Open CDC, and Close Window
             MinimizeButton.Click += (s, e) => WindowState = WindowState.Minimized;
             Github.Click += (s, e) => System.Diagnostics.Process.Start("https://github.com/RyanDBurke/coronavirus-heat-map");
             CDC.Click += (s, e) => System.Diagnostics.Process.Start("https://www.cdc.gov/coronavirus/2019-ncov/index.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2Findex.html");
