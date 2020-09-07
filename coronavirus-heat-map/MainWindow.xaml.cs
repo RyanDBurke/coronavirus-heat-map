@@ -17,6 +17,27 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+/*
+ * [CORONAVIRUS-HEAT-MAP]
+ * 
+ * I avoided using the MVVM-Framework because
+ * I figured it would be sort of overkill for what
+ * I consider a pretty straight-forward application
+ * 
+ * So, instead its broken into two main C# files
+    * StateData.cs
+        * Fetches data for each state
+        * Performs ~some~ functions for the data collected (probably shouldve split it up for clarity, but I'll do that in the future)
+    * MainWindow.xaml.cs
+        * Manages UI
+        * Evaluates and performs ~most~ functions for the data collected
+        * communicates with the XAML tags </>
+        * 
+  * Future Goals
+    * CLARITY
+    * How can I make this code easy to follow to the extent that someone could read, understand, and build upon what's already written
+*/
+
 namespace coronavirus_heat_map {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,10 +48,11 @@ namespace coronavirus_heat_map {
         private string STATE = null;
 
         // CURRENT MAP STATE (HEAT OR INTERACTIVE)
-        // App was built on interactive being the default view, so dont change
+        // App was built on interactive being the default view, so DO NOT change
         private string MAP_STATE = "interactive";
 
         // different options for the heat map
+        // default option is "tested"
         private string heatMapOption = "tested";
 
         // <State Abbreviation : Full State Name>
@@ -92,6 +114,7 @@ namespace coronavirus_heat_map {
             percentDeathsIncrease.ToolTip = " up " + st.percentageDifference("deaths").ToString("0") + "% since " + monthStrings[previousMonth - 1];
         }
 
+        // builds bar-graph based on state selected and dataType ("tested", "positive", or "deaths")
         public void buildBarGraph(string state, string dataType) {
 
             // pull rleevant state data
@@ -189,7 +212,7 @@ namespace coronavirus_heat_map {
         }
 
 
-        /* use to select which data you'd like to see for the bar graph */
+        // use to select which data you'd like to see for the bar graph 
         public void barGraphText(object sender, MouseButtonEventArgs e) {
 
             if (STATE == null) {
@@ -221,7 +244,7 @@ namespace coronavirus_heat_map {
 
         }
 
-        /* this needs to handle all states being clicked! */
+        // handles all states being clicked in "interactive" UI state
         public void clickedState(object sender, MouseButtonEventArgs e) {
 
             string state = (string)((Path)sender).Tag;
@@ -236,7 +259,7 @@ namespace coronavirus_heat_map {
             deathsBar.Foreground = Brushes.Gray;
         }
 
-        /* changes between heat and interactive map */
+        // changes between heat and interactive map UI state
         public void changeMapState(object sender, MouseButtonEventArgs e) {
 
             // set UI MAP_STATE
@@ -288,7 +311,7 @@ namespace coronavirus_heat_map {
             switch (MAP_STATE) {
                 case "heat":
 
-                    // change button opacity, for clarity
+                    // change heat/interactive button opacity, for clarity
                     heatButton.Opacity = 1;
                     interactiveButton.Opacity = .5;
 
@@ -299,8 +322,9 @@ namespace coronavirus_heat_map {
                     testedHeatMapOption.Opacity = 1;
                     deathsHeatMapOption.Opacity = .5;
 
-                    // enables heat-map options (positive bar)
+                    // enables heat-map options (positive option)
                     // kinda confusing cause currentStateClicked is now the "positive" button
+                    // So, what I do is rearrange currentStateClicked to match the size of other heat-map options
                     currentStateClicked.Width = 80;
                     currentStateClicked.Margin = new Thickness(5,16,0,4);
                     currentStateClicked.Text = "Positive";
@@ -332,7 +356,7 @@ namespace coronavirus_heat_map {
                     testedHeatMapOption.Opacity = 0;
                     deathsHeatMapOption.Opacity = 0;
 
-                    // enables heat-map options (positive bar)
+                    // enables heat-map options (positive option)
                     // kinda confusing cause currentStateClicked is now the "positive" button
                     currentStateClicked.Width = 250;
                     currentStateClicked.Margin = new Thickness(-80, 0, 0, 4);
@@ -354,6 +378,15 @@ namespace coronavirus_heat_map {
             }
         }
 
+        // returns a dictionary of <state, percentile #>
+        // percentile is a number is 1-5
+        /*
+             * 1 => < 20th percentile
+             * 2 => 20th percentile > but < 40th percentile
+             * 3 => 40th percentile > but < 60th percentile
+             * 4 => 60th percentile > but < 80th percentile
+             * 5 => > 80th percentile
+        */
         public Dictionary<string, int> statePercentile(string dataType) {
 
             // hold each states percentile
@@ -425,6 +458,8 @@ namespace coronavirus_heat_map {
 
         }
 
+
+        // handles when a heat-map option is selected
         public void heatMapOptions(object sender, MouseButtonEventArgs e) {
 
             if (MAP_STATE == "interactive") {
