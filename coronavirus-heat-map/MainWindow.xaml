@@ -47,7 +47,7 @@
                         BorderThickness="0"
                         FontSize="16" />
                 <Button Width="35"
-                        Content="&gt;_"
+                        Content="&lt;/&gt;"
                         Name="Github"
                         Foreground="White"
                         Background="#121212"
