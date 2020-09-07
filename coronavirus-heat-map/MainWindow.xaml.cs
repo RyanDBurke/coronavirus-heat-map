@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -55,6 +56,11 @@ namespace coronavirus_heat_map {
         // default option is "tested"
         private string heatMapOption = "tested";
 
+        // percentiles
+        private Dictionary<string, int> testedPercentiles;
+        private Dictionary<string, int> positivePercentiles;
+        private Dictionary<string, int> deathsPercentiles;
+
         // <State Abbreviation : Full State Name>
         private Dictionary<string, string> statePairs = new Dictionary<string, string>() {
             {"AL","Alabama"}, {"AK","Alaska"}, {"AZ","Arizona"}, {"AR","Arkansas"}, {"CA","California"}, {"CO","Colorado"}, {"CT","Connecticut"}
@@ -86,6 +92,11 @@ namespace coronavirus_heat_map {
             CDC.Click += (s, e) => System.Diagnostics.Process.Start("https://www.cdc.gov/coronavirus/2019-ncov/index.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2Findex.html");
             // MaximizeButton.Click += (s, e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             CloseButton.Click += (s, e) => Close();
+
+            // calculate current percentiles now to avoid slowing UI
+            testedPercentiles = statePercentile("tested");
+            positivePercentiles = statePercentile("positive");
+            deathsPercentiles = statePercentile("deaths");
         }
 
         // displays the data for the state on the left side
@@ -343,7 +354,22 @@ namespace coronavirus_heat_map {
                     MAP.IsEnabled = false;
 
                     // change map colors
-                    Dictionary<string, int> percentiles = statePercentile(heatMapOption); // tested for now, but will be dependent on button input
+                    Dictionary<string, int> percentiles;
+                    switch (heatMapOption) {
+                        case "tested":
+                            percentiles = testedPercentiles;
+                            break;
+                        case "positive":
+                            percentiles = positivePercentiles;
+                            break;
+                        case "deaths":
+                            percentiles = deathsPercentiles;
+                            break;
+                        default:
+                            percentiles = testedPercentiles;
+                            break;
+                    }
+
                     foreach (KeyValuePair<string, string> states in statePairs) {
                         var name = (Path)this.FindName(states.Key);
                         name.Fill = (Brush)bc.ConvertFrom(colors[percentiles[states.Key] - 1]);
@@ -453,16 +479,7 @@ namespace coronavirus_heat_map {
                     percentile[statesSorted[i]] = 5;
                 }
             }
-
-            /*
-             * 1 => < 20th percentile
-             * 2 => 20th percentile > but < 40th percentile
-             * 3 => 40th percentile > but < 60th percentile
-             * 4 => 60th percentile > but < 80th percentile
-             * 5 => > 80th percentile
-            */
             return percentile;
-
         }
 
 
@@ -501,8 +518,23 @@ namespace coronavirus_heat_map {
                 }
 
                 // change map colors
+                Dictionary<string, int> percentiles;
+                switch (heatMapOption) {
+                    case "tested":
+                        percentiles = testedPercentiles;
+                        break;
+                    case "positive":
+                        percentiles = positivePercentiles;
+                        break;
+                    case "deaths":
+                        percentiles = deathsPercentiles;
+                        break;
+                    default:
+                        percentiles = testedPercentiles;
+                        break;
+                }
+
                 var bc = new BrushConverter();
-                Dictionary<string, int> percentiles = statePercentile(heatMapOption); // tested for now, but will be dependent on button input
                 foreach (KeyValuePair<string, string> states in statePairs) {
                     var name = (Path)this.FindName(states.Key);
                     name.Fill = (Brush)bc.ConvertFrom(colors[percentiles[states.Key] - 1]);
