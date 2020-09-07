@@ -49,8 +49,8 @@ namespace coronavirus_heat_map {
 
         public MainWindow() {
 
-            // Sleep window to allow for longer splash-screen
-            System.Threading.Thread.Sleep(500);
+            // Sleep window to allow for longer splash--screen
+            System.Threading.Thread.Sleep(4000);
             InitializeComponent();
 
             // Screen-Size Properties
@@ -93,7 +93,7 @@ namespace coronavirus_heat_map {
 
         public void buildBarGraph(string state, string dataType) {
 
-            // pull state data
+            // pull rleevant state data
             StateData st = new StateData(state);
 
             // returns max value of all keys in dictionary (helpful for creating bargraph bounds)
