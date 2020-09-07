@@ -27,9 +27,10 @@ namespace coronavirus_heat_map {
         private string STATE = null;
 
         // CURRENT MAP STATE (HEAT OR INTERACTIVE)
+        // App was built on interactive being the default view, so dont change
         private string MAP_STATE = "interactive";
 
-        // private string
+        // different options for the heat map
         private string heatMapOption = "tested";
 
         // <State Abbreviation : Full State Name>
