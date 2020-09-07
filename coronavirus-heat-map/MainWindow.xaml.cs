@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,10 +24,13 @@ namespace coronavirus_heat_map {
     public partial class MainWindow : Window {
 
         // STATE SELECTED
-        private string STATE;
+        private string STATE = null;
 
         // CURRENT MAP STATE (HEAT OR INTERACTIVE)
         private string MAP_STATE = "interactive";
+
+        // private string
+        private string heatMapOption = "tested";
 
         // <State Abbreviation : Full State Name>
         private Dictionary<string, string> statePairs = new Dictionary<string, string>() {
@@ -46,7 +50,7 @@ namespace coronavirus_heat_map {
         public MainWindow() {
 
             // Sleep window to allow for longer splash-screen
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(500);
             InitializeComponent();
 
             // Screen-Size Properties
@@ -135,7 +139,7 @@ namespace coronavirus_heat_map {
                 for (int i = 0; i < barStops.Count; i++) {
                     double difference = Math.Abs(d - barStops[i]);
 
-                    if (difference < lowestDifference) { 
+                    if (difference < lowestDifference) {
                         lowestDifference = difference;
                         indexBarStop = i;
                     }
@@ -187,7 +191,11 @@ namespace coronavirus_heat_map {
         /* use to select which data you'd like to see for the bar graph */
         public void barGraphText(object sender, MouseButtonEventArgs e) {
 
-            string dataType = ((string) (((TextBlock)sender).Tag)).ToLower();
+            if (STATE == null) {
+                return;
+            }
+
+            string dataType = ((string)(((TextBlock)sender).Tag)).ToLower();
 
             switch (dataType) {
                 case "tested":
@@ -209,12 +217,13 @@ namespace coronavirus_heat_map {
             
             buildBarGraph(STATE, dataType);
             
+
         }
 
         /* this needs to handle all states being clicked! */
         public void clickedState(object sender, MouseButtonEventArgs e) {
 
-            string state = (string) ((Path)sender).Tag;
+            string state = (string)((Path)sender).Tag;
             STATE = state;
             leftSide(STATE);
             currentStateClicked.Text = statePairs[STATE.ToUpper()];
@@ -229,17 +238,21 @@ namespace coronavirus_heat_map {
         /* changes between heat and interactive map */
         public void changeMapState(object sender, MouseButtonEventArgs e) {
 
+            // set UI MAP_STATE
             string map_state = ((string)((TextBlock)sender).Tag).ToLower();
             MAP_STATE = map_state;
 
             // color depending on state's percentile 
-            string[] colors = new string[] {"#4d0000", "#b30000", "#ff0000", "#ff6666", "#ffb3b3"};
+            string[] colors = new string[] { "#ffb3b3", "#ff6666", "#ff0000", "#b30000", "#4d0000" };
+
+            // revert STATE to null
+            STATE = null;
 
             // clear stats on left sidebar
             numTested.Text = "--";
             numPositive.Text = "--";
             numDeaths.Text = "--";
-            
+
             // reset percentage increases
             percentTestedIncrease.Text = "";
             percentPositiveIncrease.Text = "";
@@ -278,10 +291,31 @@ namespace coronavirus_heat_map {
                     heatButton.Opacity = 1;
                     interactiveButton.Opacity = .5;
 
+                    // enable color blocks
+                    colorBlocks.Opacity = 1;
+
+                    // enable heat-map options
+                    testedHeatMapOption.Opacity = 1;
+                    deathsHeatMapOption.Opacity = .5;
+
+                    // enables heat-map options (positive bar)
+                    // kinda confusing cause currentStateClicked is now the "positive" button
+                    currentStateClicked.Width = 80;
+                    currentStateClicked.Margin = new Thickness(5,16,0,4);
+                    currentStateClicked.Text = "Positive";
+                    currentStateClicked.Background = (Brush)bc.ConvertFrom("#121212");
+                    currentStateClicked.Opacity = .5;
+                    currentStateClicked.FontSize = 12;
+
                     // change map interactions
                     MAP.IsEnabled = false;
 
                     // change map colors
+                    Dictionary<string, int> percentiles = statePercentile(heatMapOption); // tested for now, but will be dependent on button input
+                    foreach (KeyValuePair<string, string> states in statePairs) {
+                        var name = (Path)this.FindName(states.Key);
+                        name.Fill = (Brush)bc.ConvertFrom(colors[percentiles[states.Key] - 1]);
+                    }
 
                     break;
                 case "interactive":
@@ -290,27 +324,151 @@ namespace coronavirus_heat_map {
                     interactiveButton.Opacity = 1;
                     heatButton.Opacity = .5;
 
+                    // disable color blocks
+                    colorBlocks.Opacity = 0;
+
+                    // enable heat-map options
+                    testedHeatMapOption.Opacity = 0;
+                    deathsHeatMapOption.Opacity = 0;
+
+                    // enables heat-map options (positive bar)
+                    // kinda confusing cause currentStateClicked is now the "positive" button
+                    currentStateClicked.Width = 250;
+                    currentStateClicked.Margin = new Thickness(-80, 0, 0, 4);
+                    currentStateClicked.Text = "--";
+                    currentStateClicked.Background = (Brush)bc.ConvertFrom("#292929");
+                    currentStateClicked.Opacity = 1;
+                    currentStateClicked.FontSize = 25;
+
                     // change map interactions
                     MAP.IsEnabled = true;
 
                     // reset map colors
+                    foreach (KeyValuePair<string, string> states in statePairs) {
+                        var name = (Path)this.FindName(states.Key);
+                        name.Fill = (Brush)bc.ConvertFrom("#ffd2d2d2");
+                    }
 
                     break;
             }
         }
 
-        public Dictionary<string, int> statePercentile() {
+        public Dictionary<string, int> statePercentile(string dataType) {
 
             // hold each states percentile
             Dictionary<string, int> percentile = new Dictionary<string, int>();
 
+            // holds each states relevant data (tested, positive, deaths)
+            Dictionary<string, int> dataForState = new Dictionary<string, int>();
 
+            foreach (string state in statePairs.Keys) {
 
+                // fetch data for each state
+                StateData currentState = new StateData(state);
 
+                // add states to percentile
+                percentile[state] = -1;
+
+                // data
+                List<int> data;
+
+                // fetch data
+                if (dataType == "tested") {
+                    data = currentState.getNumTested();
+                } else if (dataType == "positive") {
+                    data = currentState.getNumPositive();
+                } else if (dataType == "deaths") {
+                    data = currentState.getNumDeaths();
+                } else {
+                    Console.WriteLine("Invalid Parameter in MainWindow.cs statePercentile");
+                    return null;
+                }
+
+                // add <state, relevant data> pairs for most recent available data
+                dataForState[state] = data[data.Count - 1];
+            }
+
+            // order states by value
+            var sortedData = from pair in dataForState orderby pair.Value ascending select pair;
+            List<string> statesSorted = new List<string>();
+            foreach (KeyValuePair<string, int> kvp in sortedData) {
+                statesSorted.Add(kvp.Key);
+            }
+
+            //  return percentile;
+            int numStates = statesSorted.Count;
+            int numStatesInPercentile = numStates / 5;
+
+            for (int i = 0; i < numStates; i++) {
+                if (i < numStatesInPercentile * 1) {
+                    percentile[statesSorted[i]] = 1;
+                } else if (i >= numStatesInPercentile * 1 && i < numStatesInPercentile * 2) {
+                    percentile[statesSorted[i]] = 2;
+                } else if (i >= numStatesInPercentile * 2 && i < numStatesInPercentile * 3) {
+                    percentile[statesSorted[i]] = 3;
+                } else if (i >= numStatesInPercentile * 3 && i < numStatesInPercentile * 4) {
+                    percentile[statesSorted[i]] = 4;
+                } else {
+                    percentile[statesSorted[i]] = 5;
+                }
+            }
+
+            /*
+             * 1 => < 20th percentile
+             * 2 => 20th percentile > but < 40th percentile
+             * 3 => 40th percentile > but < 60th percentile
+             * 4 => 60th percentile > but < 80th percentile
+             * 5 => > 80th percentile
+            */
             return percentile;
+
         }
 
-        
+        public void heatMapOptions(object sender, MouseButtonEventArgs e) {
+
+            if (MAP_STATE == "interactive") {
+                return;
+            } else {
+
+                // color depending on state's percentile 
+                string[] colors = new string[] { "#ffb3b3", "#ff6666", "#ff0000", "#b30000", "#4d0000" };
+
+                // option selected
+                string optionSelected = (string)((TextBlock)sender).Tag;
+
+                switch (optionSelected) {
+                    case "testedOption":
+                        heatMapOption = "tested";
+                        testedHeatMapOption.Opacity = 1;
+                        deathsHeatMapOption.Opacity = .5;
+                        currentStateClicked.Opacity = .5;
+                        break;
+                    case "positiveOption":
+                        heatMapOption = "positive";
+                        testedHeatMapOption.Opacity = .5;
+                        deathsHeatMapOption.Opacity = .5;
+                        currentStateClicked.Opacity = 1;
+                        break;
+                    case "deathsOption":
+                        heatMapOption = "deaths";
+                        testedHeatMapOption.Opacity = .5;
+                        deathsHeatMapOption.Opacity = 1;
+                        currentStateClicked.Opacity = .5;
+                        break;
+                }
+
+                // change map colors
+                var bc = new BrushConverter();
+                Dictionary<string, int> percentiles = statePercentile(heatMapOption); // tested for now, but will be dependent on button input
+                foreach (KeyValuePair<string, string> states in statePairs) {
+                    var name = (Path)this.FindName(states.Key);
+                    name.Fill = (Brush)bc.ConvertFrom(colors[percentiles[states.Key] - 1]);
+                }
+            }
+
+        }
+
+
 
     }
 }
