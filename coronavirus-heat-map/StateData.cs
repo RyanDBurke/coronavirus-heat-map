@@ -8,7 +8,8 @@ using System.Windows.Documents;
 
 namespace coronavirus_heat_map {
     class StateData {
-        // data is linked via their indices within their respected structures
+
+        // data is linked via their indices within their respective structures
         readonly List<int> unixTimes = new List<int>();
         readonly List<int> numTested = new List<int>();
         readonly List<int> numPositive = new List<int>();
@@ -72,7 +73,7 @@ namespace coronavirus_heat_map {
             int previousMonth = (currentMonth == 1) ? 12 : currentMonth - 1; // handles January/December
             int previousMonthNum = -1;
 
-            int breakLoop = 0;
+            bool breakLoop = false;
 
             // get previous month's data
             for (int i = unixTimes.Count - 1; i >= 0; i--) {
@@ -81,13 +82,13 @@ namespace coronavirus_heat_map {
                         if (UnixTimeStampToDateTime(unixTimes[j]).Month == previousMonth) {
                             previousMonthNum = data[j];
                         } else {
-                            breakLoop = 1;
+                            breakLoop = true;
                             break;
                         }
                     }
                 }
 
-                if (breakLoop == 1) {
+                if (breakLoop) {
                     break;
                 }
             }

@@ -61,6 +61,7 @@
                         Background="#121212"
                         BorderThickness="0"
                         FontSize="16" />
+
                 <!-- Maximize button <Button Width="35" Content="+" Name="MaximizeButton" Foreground="Gray" Background="#121212" BorderThickness="0" FontSize="16" />-->
                 <Button Width="35"
                         Content="x"

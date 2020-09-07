@@ -24,10 +24,10 @@ namespace coronavirus_heat_map {
     public partial class MainWindow : Window {
 
         // STATE SELECTED
-        public string STATE;
+        private string STATE;
 
         // <State Abbreviation : Full State Name>
-        public Dictionary<string, string> statePairs = new Dictionary<string, string>() {
+        private Dictionary<string, string> statePairs = new Dictionary<string, string>() {
             {"AL","Alabama"}, {"AK","Alaska"}, {"AZ","Arizona"}, {"AR","Arkansas"}, {"CA","California"}, {"CO","Colorado"}, {"CT","Connecticut"}
             , {"DE","Delaware"}, {"FL","Florida"}, {"GA","Georgia"}, {"HI","Hawaii"}, {"ID","Idaho"}, {"IL","Illinois"}, {"IN","Indiana"}, {"IA","IOWA"}
             , {"KS","Kansas"}, {"KY","Kentucky"}, {"LA","Louisiana"}, {"ME","Maine"}, {"MD","Maryland"}, {"MA","Massachusetts"}, {"MI","Michigan"}, {"MN","Minnesota"}
@@ -36,6 +36,10 @@ namespace coronavirus_heat_map {
             , {"SC","South Carolina"}, {"SD","South Dakota"}, {"TN","Tennessee"}, {"TX","Texas"}, {"UT","Utah"}, {"VT","Vermont"}, {"VA","Virginia"}, {"WA","Washington"}
             , {"WV","West Virginia"}, {"WI","Wisconsin"}, {"WY","Wyoming"}, {"DC","District of Columbia"}
         };
+
+        // list of valid month names
+        private List<string> monthStrings = new List<string>() { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
 
         public MainWindow() {
 
@@ -53,13 +57,6 @@ namespace coronavirus_heat_map {
             CDC.Click += (s, e) => System.Diagnostics.Process.Start("https://www.cdc.gov/coronavirus/2019-ncov/index.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2Findex.html");
             // MaximizeButton.Click += (s, e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             CloseButton.Click += (s, e) => Close();
-
-            // Left Side (would change via right-side input)
-            // leftSide(STATE);
-            // currentStateClicked.Text = statePairs[STATE];
-
-            // Right-Side & Map
-
         }
 
         // displays the data for the state on the left side
@@ -68,6 +65,7 @@ namespace coronavirus_heat_map {
             List<int> tested = st.getNumTested();
             List<int> positive = st.getNumPositive();
             List<int> deaths = st.getNumDeaths();
+            List<int> unixTimes = st.getUnixTimes();
 
             // display data
             numTested.Text = (tested[tested.Count - 1] > 1000000) ? ((double)tested[tested.Count - 1] / 1000000).ToString("0.##") + "M" : tested[tested.Count - 1].ToString("#,##0");
@@ -78,18 +76,19 @@ namespace coronavirus_heat_map {
             percentTestedIncrease.Text = "+" + st.percentageDifference("tested").ToString("0") + "%";
             percentPositiveIncrease.Text = "+" + st.percentageDifference("positive").ToString("0") + "%";
             percentDeathsIncrease.Text = "+" + st.percentageDifference("deaths").ToString("0") + "%";
+
+            // ToolTip for percents
+            int currentMonth = st.UnixTimeStampToDateTime(unixTimes[unixTimes.Count - 1]).Month;
+            int previousMonth = (currentMonth == 1) ? 12 : currentMonth - 1; // handles January/December
+            percentTestedIncrease.ToolTip = " up " + st.percentageDifference("tested").ToString("0") + "% since " + monthStrings[previousMonth - 1];
+            percentPositiveIncrease.ToolTip = " up " + st.percentageDifference("positive").ToString("0") + "% since " + monthStrings[previousMonth - 1];
+            percentDeathsIncrease.ToolTip = " up " + st.percentageDifference("deaths").ToString("0") + "% since " + monthStrings[previousMonth - 1];
         }
 
         public void buildBarGraph(string state, string dataType) {
 
-            Console.WriteLine(state);
-
             // pull state data
             StateData st = new StateData(state);
-
-            if (st == null) {
-                Console.WriteLine("FUCKING NULL");
-            }
 
             // returns max value of all keys in dictionary (helpful for creating bargraph bounds)
             int maxValue = st.barGraphData(dataType).Values.Max();
@@ -107,9 +106,6 @@ namespace coronavirus_heat_map {
                 barStops.Add(stopNum);
                 stopNum += barGraphIncrement;
             }
-
-            // list of valid month names
-            List<string> monthStrings = new List<string>() { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
             // I choose to dump my dictionary into 2 Lists, associated by their index
             List<int> months = new List<int>();
