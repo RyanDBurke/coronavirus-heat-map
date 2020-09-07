@@ -17,3 +17,7 @@ a windows desktop application displaying covid statistics.
 <figure>
   <img src="./coronavirus-heat-map/images/demoProgress.png" alt="demo">
 </figure>
+
+<figure>
+  <img src="./coronavirus-heat-map/images/heatMap.png" alt="demo">
+</figure>
