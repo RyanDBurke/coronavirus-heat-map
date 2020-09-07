@@ -242,13 +242,13 @@ namespace coronavirus_heat_map {
             string map_state = ((string)((TextBlock)sender).Tag).ToLower();
             MAP_STATE = map_state;
 
-            // color depending on state's percentile 
+            // color depending on state's percentile!
             string[] colors = new string[] { "#ffb3b3", "#ff6666", "#ff0000", "#b30000", "#4d0000" };
 
             // revert STATE to null
             STATE = null;
 
-            // clear stats on left sidebar
+            // clear stats on left-sidebar
             numTested.Text = "--";
             numPositive.Text = "--";
             numDeaths.Text = "--";
