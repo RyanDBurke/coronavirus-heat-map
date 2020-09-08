@@ -33,6 +33,11 @@
 4. A window will appear, select "Install"
 5. Enjoy!
 
+**NOTE:** If you have the Visual Studio 2019 IDE and don't want to download a .zip
+1. Clone the repository ```https://github.com/RyanDBurke/coronavirus-heat-map.git```
+2. Open the project solution
+3. Press CTRL+F5 to run application
+
 ## Concluding Thoughts<a name="thoughts"></a>
 ```
 [CORONAVIRUS-HEAT-MAP]
