@@ -55,7 +55,7 @@ Future Goals
     understand, and build upon it.
 
 NOTE
-  * I use the word "state" alot here. Sometimes to refer to actual states (Maryland, New York, etc) 
+  * I use the word "state" alot in the source code. Sometimes to refer to actual states (Maryland, New York, etc) 
     and other times to refer to the state of the UI (heat map or interactive map). 
     I hope context-clues negate any semantic ambiguity.
 ```
