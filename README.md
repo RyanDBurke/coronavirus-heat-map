@@ -2,7 +2,7 @@
 
 # Table of Contents
 
-* [What?](#what)
+* [Demo Pictures](#what)
 * [Features](#cool)
 * [Install](#install)
 * [Concluding Thoughts](#thoughts)
