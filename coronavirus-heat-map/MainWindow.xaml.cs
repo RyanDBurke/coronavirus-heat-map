@@ -22,8 +22,8 @@ using System.Windows.Shapes;
  * [CORONAVIRUS-HEAT-MAP]
  * 
  * I avoided using the MVVM-Framework because
- * I figured it would be sort of overkill for what
- * I consider a pretty straight-forward application
+      I figured it would be sort of overkill for what
+      I consider a pretty straight-forward application
  * 
  * So, instead its broken into two main C# files
     * StateData.cs
@@ -37,6 +37,11 @@ using System.Windows.Shapes;
   * Future Goals
     * CLARITY
     * How can I make this code easy to follow to the extent that someone could read, understand, and build upon what's already written
+    * 
+  * NOTE
+    * I use the word "state" alot here. Sometimes to refer to actual states (Maryland, New York, etc)
+        and other times to refer to the state of the UI (heat map or interactive map). I hope
+        context-clues negate any semantic ambiguity.
 */
 
 namespace coronavirus_heat_map {
@@ -344,7 +349,7 @@ namespace coronavirus_heat_map {
                     // kinda confusing cause currentStateClicked is now the "positive" button
                     // So, what I do is rearrange currentStateClicked to match the size of other heat-map options
                     currentStateClicked.Width = 80;
-                    currentStateClicked.Margin = new Thickness(5,16,0,4);
+                    currentStateClicked.Margin = new Thickness(5,15,0,5);
                     currentStateClicked.Text = "Positive";
                     currentStateClicked.Background = (Brush)bc.ConvertFrom("#121212");
                     currentStateClicked.Opacity = .5;
@@ -353,7 +358,7 @@ namespace coronavirus_heat_map {
                     // change map interactions
                     MAP.IsEnabled = false;
 
-                    // change map colors
+                    // assign percentiles
                     Dictionary<string, int> percentiles;
                     switch (heatMapOption) {
                         case "tested":
@@ -370,6 +375,7 @@ namespace coronavirus_heat_map {
                             break;
                     }
 
+                    // change map colors
                     foreach (KeyValuePair<string, string> states in statePairs) {
                         var name = (Path)this.FindName(states.Key);
                         name.Fill = (Brush)bc.ConvertFrom(colors[percentiles[states.Key] - 1]);
@@ -486,6 +492,7 @@ namespace coronavirus_heat_map {
         // handles when a heat-map option is selected
         public void heatMapOptions(object sender, MouseButtonEventArgs e) {
 
+            // only register event if MAP_STATE is "heat"
             if (MAP_STATE == "interactive") {
                 return;
             } else {
@@ -517,7 +524,7 @@ namespace coronavirus_heat_map {
                         break;
                 }
 
-                // change map colors
+                // assign percentiles
                 Dictionary<string, int> percentiles;
                 switch (heatMapOption) {
                     case "tested":
@@ -534,6 +541,7 @@ namespace coronavirus_heat_map {
                         break;
                 }
 
+                // change map colors
                 var bc = new BrushConverter();
                 foreach (KeyValuePair<string, string> states in statePairs) {
                     var name = (Path)this.FindName(states.Key);

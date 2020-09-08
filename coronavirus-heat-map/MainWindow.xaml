@@ -513,7 +513,7 @@
                         Orientation="Horizontal">
                 <StackPanel Width="250" Margin="125, 0, 0, 0" Orientation="Horizontal">
                     <TextBlock Width="80"
-                               Margin="0,16,0,4"
+                               Margin="0,15,0,5"
                                TextAlignment="Center"
                                Name="testedHeatMapOption"
                                Background="#121212"
@@ -535,7 +535,7 @@
                     --
                     </TextBlock>
                     <TextBlock Width="80"
-                               Margin="5,16,0,4"
+                               Margin="5,15,0,5"
                                TextAlignment="Center"
                                Background="#121212"
                                Foreground="White"
