@@ -1,4 +1,4 @@
-###### Windows Only
+###### v1.0
 
 # Table of Contents
 
@@ -27,6 +27,7 @@
 * Graph displaying statisical totals from the previous six months
 
 ## Installation <a name="install"></a>
+###### Windows Only
 1. visit https://drive.google.com/file/d/10aEt1DqdfudY6pT64NO-YPxfZauiQCSX/view?usp=sharing
 2. Download **COVID_HEAT_MAP.zip**, then unzip
 3. Double-Click **setup.exe** (Windows may block installation, select "More info", then "Run Anyway").
