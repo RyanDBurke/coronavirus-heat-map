@@ -79,7 +79,7 @@ namespace coronavirus_heat_map {
         public MainWindow() {
 
             // Sleep window to allow for longer splash--screen
-            System.Threading.Thread.Sleep(4000);
+            System.Threading.Thread.Sleep(0);
             InitializeComponent();
 
             // Screen-Size Properties
@@ -93,7 +93,7 @@ namespace coronavirus_heat_map {
             // MaximizeButton.Click += (s, e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             CloseButton.Click += (s, e) => Close();
 
-            // calculate current percentiles now to avoid slowing UI
+            // calculate current percentiles on startup to avoid slowing UI controls
             testedPercentiles = statePercentile("tested");
             positivePercentiles = statePercentile("positive");
             deathsPercentiles = statePercentile("deaths");
@@ -276,8 +276,8 @@ namespace coronavirus_heat_map {
             // set UI MAP_STATE
             string map_state = ((string)((TextBlock)sender).Tag).ToLower();
 
-            // to avoid delays from re-loading heat-map information
-            if (map_state == "heat" && MAP_STATE == "heat") {
+            // to avoid re-loading current UI State
+            if (map_state == MAP_STATE) {
                 return;
             } else {
                 MAP_STATE = map_state;
@@ -392,7 +392,7 @@ namespace coronavirus_heat_map {
                     // enables heat-map options (positive option)
                     // kinda confusing cause currentStateClicked is now the "positive" button
                     currentStateClicked.Width = 250;
-                    currentStateClicked.Margin = new Thickness(-80, 0, 0, 4);
+                    currentStateClicked.Margin = new Thickness(-80, -2, 0, 4);
                     currentStateClicked.Text = "--";
                     currentStateClicked.Background = (Brush)bc.ConvertFrom("#292929");
                     currentStateClicked.Opacity = 1;

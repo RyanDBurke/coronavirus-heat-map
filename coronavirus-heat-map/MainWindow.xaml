@@ -529,7 +529,7 @@
                            FontSize="25"
                            Name="currentStateClicked"
                                Width="250"
-                               Margin="-80,0,0,4"
+                               Margin="-80,-2,0,4"
                                Tag="positiveOption"
                                PreviewMouseDown="heatMapOptions">
                     --
