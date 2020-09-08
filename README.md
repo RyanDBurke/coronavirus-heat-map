@@ -2,8 +2,8 @@
 
 # Table of Contents
 
-* [What is This?](#what)
-* [What Does it Do?](#cool)
+* [What?](#what)
+* [Features](#cool)
 * [Install](#install)
 * [Concluding Thoughts](#thoughts)
 
@@ -28,9 +28,10 @@
 
 ## Installation <a name="install"></a>
 1. visit https://drive.google.com/file/d/10aEt1DqdfudY6pT64NO-YPxfZauiQCSX/view?usp=sharing
-2. Download COVID_HEAT_MAP.zip, then unzip
-3. Double-Click "setup" (Windows may block installation, select "More info", then "Run Anyway").
+2. Download **COVID_HEAT_MAP.zip**, then unzip
+3. Double-Click **setup.exe** (Windows may block installation, select "More info", then "Run Anyway").
 4. A window will appear, select "Install"
+5. Enjoy!
 
 ## Concluding Thoughts<a name="thoughts"></a>
 ```
