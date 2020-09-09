@@ -52,9 +52,8 @@ So, instead its broken into two main C# files
     * Performs ~some~ functions for the data collected (probably shouldve split it up for clarity, 
       but I'll do that in the future)
   * MainWindow.xaml.cs
-    * Manages UI
     * Evaluates and performs ~most~ functions for the data collected
-    * communicates with the XAML tags </>
+    * communicates/manages with the XAML-built UI
 
 Future Goals
   * How can I make this code easy to follow to the extent that someone could read, 
