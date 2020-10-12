@@ -9,18 +9,10 @@
 
 ## coronavirus-heat-map <a name="what"></a>
 <figure>
-  <img src="./demo_gif.gif" alt="demo">
-</figure>
-<figure>
   <img src="./coronavirus-heat-map/images/splashScreen.png" alt="demo">
 </figure>
-
 <figure>
-  <img src="./coronavirus-heat-map/images/demoProgress.png" alt="demo">
-</figure>
-
-<figure>
-  <img src="./coronavirus-heat-map/images/heatMap.png" alt="demo">
+  <img src="./demo_gif.gif" alt="demo">
 </figure>
 
 ## Features <a name="cool"></a>
