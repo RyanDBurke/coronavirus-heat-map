@@ -9,7 +9,7 @@
 
 ## coronavirus-heat-map <a name="what"></a>
 <figure>
-  ![demo](./demo_gif.gif)
+  <img src="./demo_gif.gif" alt="demo">
 </figure>
 <figure>
   <img src="./coronavirus-heat-map/images/splashScreen.png" alt="demo">
