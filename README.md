@@ -19,7 +19,7 @@
 * Total tested, positive, and deaths for each states
 * Interactive map where you can select your state
 * Heat map
-* Graph displaying statisical totals from the previous six months
+* Graph displaying statistical totals from the previous six months
 
 ## Installation <a name="install"></a>
 ###### Windows Only
