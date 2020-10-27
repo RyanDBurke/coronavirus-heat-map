@@ -1,7 +1,7 @@
 ###### v1.0
 
-# UPDATE: 
-The API I was using to extract the live information has been **CLOSED** only for first-responders, I'll update the app to work in the near-future. The demo below still accurately shows how the app functioned before the API closed.
+# UPDATE : 
+The API I was using to extract the live information has been **CLOSED** and can only be accessed by first-responders, I'll update the app to work in the near-future. The demo below still accurately shows how the app functioned before the API closed.
 
 # Table of Contents
 
