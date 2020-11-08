@@ -1,16 +1,16 @@
 ###### v1.0
 
 # UPDATE :confused:
-The API I was using to extract the live information has been **CLOSED** and can only be accessed by first-responders, I'll update the app to work in the near-future. The demo below still accurately shows how the app functioned before the API closed.
+The API I was using to extract the live information has been **CLOSED** and can only be accessed by first-responders, I'll update the app to work in the near-future. The [demo](#demo) below still accurately shows how the app functioned before the API closed.
 
 # Table of Contents
 
-* [Demo](#what)
+* [Demo](#demo)
 * [Features](#cool)
 * [Install](#install)
 * [Concluding Thoughts](#thoughts)
 
-## coronavirus-heat-map <a name="what"></a>
+## coronavirus-heat-map <a name="demo"></a>
 <figure>
   <img src="./coronavirus-heat-map/images/splashScreen.png" alt="demo">
 </figure>
